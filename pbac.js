@@ -4,6 +4,7 @@ const conditions = require('./conditions');
 const ZSchema = require('z-schema');
 
 const {
+  isString,
   isPlainObject,
   isBoolean,
   isArray,
@@ -110,6 +111,7 @@ Object.assign(PBAC.prototype, {
   )(this.policies);
   },
   interpolateValue(value, variables) {
+    if (!isString(value)) return value;
     return value.replace(/\${(.+?)}/g, (match, variable) => {
       return this.getVariableValue(variable, variables);
     });
@@ -165,7 +167,7 @@ Object.assign(PBAC.prototype, {
       if (prefix === 'ForAnyValue' || prefix === 'ForAllValues') {
         return conditions[key].call(this, this.getContextValue(contextKey, context), values);
       } else {
-        return values.find(value => conditions[key].call(this, this.getContextValue(contextKey, context), value));
+        return values.find(value => conditions[key].call(this, this.getContextValue(contextKey, context), this.interpolateValue(value, context)));
       }
     }, Object.keys(condition));
   },
