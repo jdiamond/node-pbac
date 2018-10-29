@@ -7,26 +7,37 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'pbac.js',
     library: 'PBAC',
-    libraryTarget: 'umd',
+    libraryTarget: 'umd'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BROWSER': JSON.stringify(true),
-    }),
+      'process.env.BROWSER': JSON.stringify(true)
+    })
   ],
   externals: {
     'ipaddr.js': {
       root: 'ipaddr',
       commonjs: 'ipaddr.js',
       commonjs2: 'ipaddr.js',
-      amd: 'ipaddr.js',
+      amd: 'ipaddr.js'
     },
     'lodash/fp': {
       root: '_',
       commonjs: 'lodash/fp',
       commonjs2: 'lodash/fp',
-      amd: 'lodash/fp',
+      amd: 'lodash/fp'
     },
-    'z-schema': 'z-schema',
-  },
+    'z-schema': 'z-schema'
+  }
 };
